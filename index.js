@@ -3,9 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
         loop: true,
-        pagination: {
-            el: '.swiper-pagination',
-        },
+     
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
@@ -181,4 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Make initial overlay texts draggable
     document.querySelectorAll('.overlay-text p').forEach(makeElementDraggable);
+
+    // Delete text using the Delete key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Delete' && activeTextElement) {
+            activeTextElement.remove(); // Remove the active text element
+            activeTextElement = null; // Reset the active element
+            inputBox.value = ''; // Clear the input box
+        }
+    });
 });
