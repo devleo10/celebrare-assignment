@@ -39,6 +39,25 @@ body {
     font-family: Arial, sans-serif;
     object-fit: cover;
 }
+.swiper-slide {
+  position: relative;
+  overflow: hidden; /* Ensure no scrollbars appear */
+}
+
+.overlay-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.overlay-text p {
+  position: absolute;
+  cursor: move; /* Change cursor to indicate draggable text */
+  pointer-events: auto; /* Allow text elements to be interacted with */
+}
 
 .overlay-text {
     position: absolute;
