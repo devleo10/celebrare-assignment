@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
-      
     });
 
     // Get controls and slides
@@ -64,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Append the new paragraph to the slide's overlay
                     const overlay = getActiveOverlayText();
                     overlay.appendChild(newParagraph);
+                    makeElementDraggable(newParagraph); // Make the new text draggable
                 }
-                 make
 
                 // Save the new text for the current slide (store it in an array)
                 slideTexts[swiper.realIndex] = newText; // Store the updated text
@@ -148,33 +147,38 @@ document.addEventListener('DOMContentLoaded', () => {
     rightAlignButton.addEventListener('click', () => changeTextAlign('right'));
 
     // Function to make overlay text draggable
-    let isDragging = false;
-    let offsetX, offsetY;
+    const makeElementDraggable = (element) => {
+        let isDragging = false;
+        let offsetX, offsetY;
 
-    const overlayText = document.querySelector('.overlay-text');
-    overlayText.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        isDragging = true;
-        offsetX = e.clientX - overlayText.getBoundingClientRect().left;
-        offsetY = e.clientY - overlayText.getBoundingClientRect().top;
-        document.addEventListener('mousemove', dragOverlayText);
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            document.removeEventListener('mousemove', dragOverlayText);
+        element.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            isDragging = true;
+            offsetX = e.clientX - element.getBoundingClientRect().left;
+            offsetY = e.clientY - element.getBoundingClientRect().top;
+            document.addEventListener('mousemove', dragElement);
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                document.removeEventListener('mousemove', dragElement);
+            });
         });
-    });
 
-    function dragOverlayText(e) {
-        if (isDragging) {
-            const swiperSlide = overlayText.closest('.swiper-slide');
-            const slideRect = swiperSlide.getBoundingClientRect();
-            
-            // Ensure overlay text stays within slide bounds
-            const left = Math.max(0, Math.min(e.clientX - offsetX, slideRect.width - overlayText.offsetWidth));
-            const top = Math.max(0, Math.min(e.clientY - offsetY, slideRect.height - overlayText.offsetHeight));
+        const dragElement = (e) => {
+            if (isDragging) {
+                const swiperSlide = element.closest('.swiper-slide');
+                const slideRect = swiperSlide.getBoundingClientRect();
 
-            overlayText.style.left = `${left}px`;
-            overlayText.style.top = `${top}px`;
-        }
-    }
+                // Ensure element stays within slide bounds
+                const left = Math.max(0, Math.min(e.clientX - offsetX, slideRect.width - element.offsetWidth));
+                const top = Math.max(0, Math.min(e.clientY - offsetY, slideRect.height - element.offsetHeight));
+
+                element.style.left = `${left}px`;
+                element.style.top = `${top}px`;
+                element.style.position = 'absolute';
+            }
+        };
+    };
+
+    // Make initial overlay texts draggable
+    document.querySelectorAll('.overlay-text p').forEach(makeElementDraggable);
 });
