@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Font size change
     fontSizeInput.addEventListener('input', () => {
         if (activeTextElement) {
-            activeTextElement.style.fontSize = `${fontSizeInput.value}px`;
+            activeTextElement.style.fontSize = fontSizeInput.value + 'px';
         }
     });
 
